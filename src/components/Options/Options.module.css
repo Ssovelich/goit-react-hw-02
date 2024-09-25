@@ -1,0 +1,15 @@
+.wrap {
+  display: flex;
+
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.btn {
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.btn:hover {
+  border: 1px solid rgba(37, 151, 245, 0.801);
+  color: rgba(37, 151, 245, 0.801);
+}
