@@ -1,13 +1,13 @@
 .wrap {
   display: flex;
-
-  gap: 20px;
+  gap: 11px;
   padding-bottom: 20px;
 }
 .btn {
   cursor: pointer;
   border: 1px solid black;
   border-radius: 5px;
+  background: #b6b5b542;
 }
 .btn:hover {
   border: 1px solid rgba(37, 151, 245, 0.801);
