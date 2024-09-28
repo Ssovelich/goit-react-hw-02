@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 import Description from "./Description/Description";
@@ -6,42 +6,52 @@ import Feedback from "./Feedback/Feedback";
 import Options from "./Options/Options";
 import Notification from "./Notification/Notification";
 
+const initialState = {
+  good: 0,
+  neutral: 0,
+  bad: 0,
+};
+
 function App() {
-  const [initialState, setInitialState] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [feedbackState, setFeedbackState] = useState(() => {
+    const storagedFeedback = localStorage.getItem("feedbackState");
+
+    if (storagedFeedback !== null) {
+      return JSON.parse(storagedFeedback);
+    }
+
+    return initialState;
   });
 
+  useEffect(() => {
+    localStorage.setItem("feedbackState", JSON.stringify(feedbackState));
+  }, [feedbackState]);
+
   const onUpdateFeedback = (feedbackType) => {
-    setInitialState({
-      ...initialState,
-      [feedbackType]: initialState[feedbackType] + 1,
+    setFeedbackState({
+      ...feedbackState,
+      [feedbackType]: feedbackState[feedbackType] + 1,
     });
 
     // if (feedbackType === "good") {
-    //   setInitialState({ ...initialState, good: initialState.good + 1 });
+    //   setFeedbackState({ ...feedbackState, good: feedbackState.good + 1 });
     // }
     // if (feedbackType === "neutral") {
-    //   setInitialState({ ...initialState, neutral: initialState.neutral + 1 });
+    //   setFeedbackState({ ...feedbackState, neutral: feedbackState.neutral + 1 });
     // }
     // if (feedbackType === "bad") {
-    //   setInitialState({ ...initialState, bad: initialState.bad + 1 });
+    //   setFeedbackState({ ...feedbackState, bad: feedbackState.bad + 1 });
     // }
   };
 
   const totalFeedback =
-    initialState.good + initialState.neutral + initialState.bad;
+    feedbackState.good + feedbackState.neutral + feedbackState.bad;
   const positiveFeedback = Math.round(
-    ((initialState.good + initialState.neutral) / totalFeedback) * 100
+    ((feedbackState.good + feedbackState.neutral) / totalFeedback) * 100
   );
 
   const onResetFeedback = () => {
-    setInitialState({
-      good: (initialState.good = 0),
-      neutral: (initialState.neutral = 0),
-      bad: (initialState.bad = 0),
-    });
+    setFeedbackState(initialState);
   };
 
   return (
@@ -54,7 +64,7 @@ function App() {
       />
       {totalFeedback > 0 ? (
         <Feedback
-          initialState={initialState}
+          feedbackState={feedbackState}
           totalFeedback={totalFeedback}
           positiveFeedback={positiveFeedback}
         />
